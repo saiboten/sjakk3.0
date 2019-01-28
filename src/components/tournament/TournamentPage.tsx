@@ -5,10 +5,13 @@ import TournamentList from "./TournamentList";
 import firebase from "../firebase/FirebaseInit";
 import Container from "../container/Container";
 import { any } from "prop-types";
+import { TournamentDict } from "../../types";
 
 interface Props {}
 
-interface State {}
+interface State {
+  tournaments: TournamentDict;
+}
 
 class TournamentPage extends React.Component<Props, State> {
   tournaments: any;

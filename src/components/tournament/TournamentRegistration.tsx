@@ -17,7 +17,7 @@ interface Callback {
 }
 
 interface Props {
-  callback: Callback;
+  callback: (input: Callback) => void;
 }
 
 interface State {
@@ -36,7 +36,7 @@ class TournamentRegistration extends React.Component<Props, State> {
     this.state = {
       name: "",
       host: "",
-      date: moment(),
+      date: moment().toDate(),
       users: []
     };
 
@@ -66,7 +66,7 @@ class TournamentRegistration extends React.Component<Props, State> {
     });
   }
 
-  dateChanged(date: any) {
+  dateChanged(date: Date) {
     this.setState({
       date
     });
@@ -87,7 +87,7 @@ class TournamentRegistration extends React.Component<Props, State> {
   submit(e: any) {
     e.preventDefault();
     this.props.callback({
-      date: this.state.date.format(),
+      date: moment(this.state.date).format(),
       host: this.state.host,
       name: this.state.name,
       id: uuidv1()

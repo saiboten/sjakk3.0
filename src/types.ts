@@ -14,8 +14,12 @@ export interface Match {
   remis: boolean;
 }
 
-interface MatchDict {
-  [id: string]: string;
+export interface MatchDict {
+  [id: string]: Match;
+}
+
+export interface TournamentDict {
+  [id: string]: Tournament;
 }
 
 export interface User {

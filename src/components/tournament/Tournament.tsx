@@ -10,13 +10,21 @@ import {
   User,
   Match,
   UsersState,
-  Tournament as TournamentType
+  Tournament as TournamentType,
+  MatchDict,
+  TournamentDict
 } from "../../types";
 import { RouteComponentProps } from "react-router";
 
 require("./tournament.css");
 
 const uuidv1 = require("uuid/v1");
+
+interface Callback {
+  white: string;
+  black: string;
+  date: any;
+}
 
 interface MatchParams {
   id: string;
@@ -26,17 +34,25 @@ interface UsersDict {
   [userid: string]: User;
 }
 
+interface Wooty {
+  matches: string[];
+}
+
+interface TournamentToString {
+  [id: string]: Wooty;
+}
+
 interface Props extends RouteComponentProps<MatchParams> {
   users: UsersDict;
-  tournaments: TournamentType[];
-  matches: Match[];
+  tournaments: TournamentToString;
+  matches: MatchDict;
 }
 
 interface State {}
 
 class Tournament extends React.Component<Props, State> {
-  tournamentMatchesIDList: string[];
-  allMatches: Match[];
+  tournamentMatchesIDList: string[] = [];
+  allMatches: MatchDict = {};
 
   static storeMatchInUserList(player: string, matchId: string) {
     const whiteMatchesList = firebase.database().ref(`users/${player}/matches`);
@@ -84,7 +100,7 @@ class Tournament extends React.Component<Props, State> {
   setMatchList() {
     if (this.tournamentMatchesIDList && this.allMatches) {
       const matchList = this.tournamentMatchesIDList
-        .map(matchId => this.allMatches[matchId])
+        .map((matchId: string) => this.allMatches[matchId])
         .filter(match => match);
 
       this.setState({
@@ -97,7 +113,7 @@ class Tournament extends React.Component<Props, State> {
     }
   }
 
-  addMatch(matchData: Match) {
+  addMatch(matchData: Callback) {
     const whitePlayer = this.props.users[matchData.white];
     const blackPlayer = this.props.users[matchData.black];
 

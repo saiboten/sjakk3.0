@@ -2,18 +2,14 @@ import React from "react";
 
 import UpcomingMatch from "./UpcomingMatch";
 import CompletedMatch from "./CompletedMatch";
-import { Match, User } from "../../types";
-
-interface matchesDict {
-  [matchid: string]: Match;
-}
+import { Match, User, MatchDict } from "../../types";
 
 interface UsersDict {
   [userid: string]: User;
 }
 
 interface Props {
-  matches: matchesDict;
+  matches: MatchDict;
   matchesIDs: string[];
   tournament: string;
   users: UsersDict;
@@ -21,6 +17,10 @@ interface Props {
 
 class MatchList extends React.Component<Props> {
   render() {
+    if (!this.props.matchesIDs) {
+      return <p>Ingen kamper</p>;
+    }
+
     const matchList = this.props.matchesIDs.map((matchID: string) => {
       let matchJsx;
 
@@ -45,6 +45,9 @@ class MatchList extends React.Component<Props> {
               black={this.props.users[match.black]}
               key={match.id}
               match={match}
+              matches={this.props.matches}
+              matchesIDs={this.props.matchesIDs}
+              users={this.props.users}
             />
           );
         }
