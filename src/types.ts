@@ -1,4 +1,6 @@
-import UserMatchesList from "./components/users/UserMatchesList";
+export interface MatchDict {
+  [key: string]: Match;
+}
 
 export interface Match {
   white: string;
@@ -14,12 +16,8 @@ export interface Match {
   remis: boolean;
 }
 
-export interface MatchDict {
-  [id: string]: Match;
-}
-
-export interface TournamentDict {
-  [id: string]: Tournament;
+export interface UserDict {
+  [key: string]: User;
 }
 
 export interface User {
@@ -29,14 +27,20 @@ export interface User {
   rating: number;
 }
 
+export interface TournamentDict {
+  [key: string]: Tournament;
+}
+
 export interface Tournament {
   date: string;
   host: string;
   id: string;
   name: string;
-  matches: MatchDict;
+  matches: string[];
 }
 
-export interface UsersState {
-  [id: string]: User;
+export interface AppState {
+  tournaments: TournamentDict;
+  matches: MatchDict;
+  users: UserDict;
 }

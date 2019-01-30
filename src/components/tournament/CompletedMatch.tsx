@@ -2,15 +2,15 @@ import React from "react";
 
 import firebase from "../firebase/FirebaseInit";
 import MatchHelper from "./MatchHelper";
-import { Match } from "../../types";
+import { Match, User } from "../../types";
 
 require("./completedmatch.css");
 
 interface Props {
   match: Match;
   tournament: string;
-  white: any;
-  black: any;
+  white: User;
+  black: User;
 }
 
 interface State {

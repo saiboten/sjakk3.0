@@ -6,14 +6,7 @@ import MatchList from "./MatchList";
 import MatchRegistration from "./MatchRegistration";
 import firebase from "../firebase/FirebaseInit";
 import Container from "../container/Container";
-import {
-  User,
-  Match,
-  UsersState,
-  Tournament as TournamentType,
-  MatchDict,
-  TournamentDict
-} from "../../types";
+import { MatchDict, TournamentDict, AppState, UserDict } from "../../types";
 import { RouteComponentProps } from "react-router";
 
 require("./tournament.css");
@@ -30,21 +23,9 @@ interface MatchParams {
   id: string;
 }
 
-interface UsersDict {
-  [userid: string]: User;
-}
-
-interface Wooty {
-  matches: string[];
-}
-
-interface TournamentToString {
-  [id: string]: Wooty;
-}
-
 interface Props extends RouteComponentProps<MatchParams> {
-  users: UsersDict;
-  tournaments: TournamentToString;
+  users: UserDict;
+  tournaments: TournamentDict;
   matches: MatchDict;
 }
 
@@ -178,14 +159,17 @@ class Tournament extends React.Component<Props, State> {
 }
 
 export default connect(
-  ({
-    users: { users },
-    matches: { matches },
-    tournaments: { tournaments }
-  }: any) => ({
-    users,
-    matches,
-    tournaments
-  }),
+  (state: AppState) => {
+    const {
+      users: { users },
+      matches: { matches },
+      tournaments: { tournaments }
+    } = state;
+    return {
+      users,
+      matches,
+      tournaments
+    };
+  },
   dispatch => ({})
 )(Tournament);
