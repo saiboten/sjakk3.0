@@ -9,7 +9,7 @@ import { string } from "prop-types";
 
 const uuidv1 = require("uuid/v1");
 
-interface Callback {
+export interface NewTournamentData {
   date: string;
   host: string;
   name: string;
@@ -17,7 +17,7 @@ interface Callback {
 }
 
 interface Props {
-  callback: (input: Callback) => void;
+  callback: (input: NewTournamentData) => void;
 }
 
 interface State {
@@ -72,19 +72,19 @@ class TournamentRegistration extends React.Component<Props, State> {
     });
   }
 
-  nameChanged(e: any) {
+  nameChanged(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
       name: e.target.value
     });
   }
 
-  hostChanged(e: any) {
+  hostChanged(e: React.ChangeEvent<HTMLSelectElement>) {
     this.setState({
       host: e.target.value
     });
   }
 
-  submit(e: any) {
+  submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     this.props.callback({
       date: moment(this.state.date).format(),

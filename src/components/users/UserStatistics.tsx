@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import Container from "../container/Container";
 import UserMatchesList from "./UserMatchesList";
-import { Match, User } from "../../types";
+import { Match, User, AppState } from "../../types";
 import { RouteComponentProps } from "react-router";
 
 interface MatchParams {
@@ -111,19 +111,24 @@ class UserStatistics extends React.Component<Props, State> {
   }
 }
 
+interface OwnProps {
+  label: string;
+}
+
 export default connect(
-  (
-    {
+  (state: AppState, ownProps: any) => {
+    const {
       tournaments: { tournaments },
-      users: { users },
+      users,
       matches: { matches }
-    }: any,
-    ownProps: any
-  ) => {
+    } = state;
+
+    const user: User = users[ownProps.match.params.id];
+
     return {
       matches,
       users,
-      user: users[ownProps.match.params.id],
+      user,
       tournaments
     };
   },

@@ -1,12 +1,11 @@
 import React from "react";
-import { any } from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import Container from "../container/Container";
 import ScoreBoard from "./ScoreBoard";
 import AddUserForm from "./AddUserForm";
-import { User } from "../../types";
+import { AppState } from "../../types";
 
 const UsersPage = ({ users }: any) => {
   const userList = Object.values(users);
@@ -29,8 +28,14 @@ const UsersPage = ({ users }: any) => {
 };
 
 export default connect(
-  ({ users: { users } }: any) => ({
-    users
-  }),
+  (state: AppState) => {
+    const {
+      users: { users }
+    } = state;
+    return;
+    {
+      users;
+    }
+  },
   dispatch => ({})
 )(UsersPage);

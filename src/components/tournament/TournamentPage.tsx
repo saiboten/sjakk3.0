@@ -1,10 +1,11 @@
 import React from "react";
 
-import TournamentRegistration from "./TournamentRegistration";
+import TournamentRegistration, {
+  NewTournamentData
+} from "./TournamentRegistration";
 import TournamentList from "./TournamentList";
 import firebase from "../firebase/FirebaseInit";
 import Container from "../container/Container";
-import { any } from "prop-types";
 import { TournamentDict } from "../../types";
 
 interface Props {}
@@ -16,7 +17,7 @@ interface State {
 class TournamentPage extends React.Component<Props, State> {
   tournaments: any;
 
-  static tournamentAdded(tournament: any) {
+  static tournamentAdded(tournament: NewTournamentData) {
     firebase
       .database()
       .ref(`tournaments/${tournament.id}`)

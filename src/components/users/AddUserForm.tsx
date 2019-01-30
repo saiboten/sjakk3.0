@@ -9,8 +9,13 @@ interface State {
   email: string;
 }
 
+interface NewName {
+  name: string;
+  email: string;
+}
+
 class AddUserForm extends React.Component<Props, State> {
-  static nameAdded(data: any) {
+  static nameAdded(data: NewName) {
     const user = {
       name: data.name,
       id: data.email.replace(/\./, "-dot-"),

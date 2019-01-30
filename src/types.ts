@@ -22,7 +22,7 @@ export interface UserDict {
 
 export interface User {
   id: string;
-  matches: MatchDict;
+  matches: string[];
   name: string;
   rating: number;
 }
