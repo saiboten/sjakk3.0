@@ -160,7 +160,11 @@ class Tournament extends React.Component<Props, State> {
 
 export default connect(
   (state: AppState) => {
-    const { users, matches, tournaments } = state;
+    const {
+      users: { users },
+      matches: { matches },
+      tournaments: { tournaments }
+    } = state;
     return {
       users,
       matches,

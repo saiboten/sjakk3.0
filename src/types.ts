@@ -40,7 +40,13 @@ export interface Tournament {
 }
 
 export interface AppState {
-  tournaments: TournamentDict;
-  matches: MatchDict;
-  users: UserDict;
+  tournaments: {
+    tournaments: TournamentDict;
+  };
+  matches: {
+    matches: MatchDict;
+  };
+  users: {
+    users: UserDict;
+  };
 }

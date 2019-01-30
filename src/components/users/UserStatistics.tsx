@@ -22,6 +22,10 @@ class UserStatistics extends React.Component<Props, State> {
   render() {
     const { matches, tournaments, users, match, user } = this.props;
 
+    if (!user) {
+      return <React.Fragment />;
+    }
+
     const userId = match.params.id;
 
     let matchesPlayed = 0;
@@ -119,7 +123,7 @@ export default connect(
   (state: AppState, ownProps: any) => {
     const {
       tournaments: { tournaments },
-      users,
+      users: { users },
       matches: { matches }
     } = state;
 

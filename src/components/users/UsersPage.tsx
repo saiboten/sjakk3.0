@@ -32,10 +32,9 @@ export default connect(
     const {
       users: { users }
     } = state;
-    return;
-    {
-      users;
-    }
+    return {
+      users
+    };
   },
   dispatch => ({})
 )(UsersPage);
