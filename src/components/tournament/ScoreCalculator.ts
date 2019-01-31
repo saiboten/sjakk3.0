@@ -1,8 +1,8 @@
 import firebase from "../firebase/FirebaseInit";
 import { User, Match } from "../../types";
-var glicko2 = require("glicko2");
+import glicko2 from "glicko2";
 
-var settings = {
+const settings = {
   // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
   //      be tested to decide which value results in greatest predictive accuracy."
   tau: 0.5,
@@ -15,7 +15,7 @@ var settings = {
   vol: 0.06
 };
 
-var ranking = new glicko2.Glicko2(settings);
+const ranking = new glicko2.Glicko2(settings);
 
 class ScoreCalculator {
   static calculateScore(
