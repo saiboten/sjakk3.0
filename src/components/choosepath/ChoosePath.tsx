@@ -9,17 +9,12 @@ class ChoosePath extends React.Component {
   render() {
     return (
       <Container>
-        <h1>Hva vil du gjøre?</h1>
-
-        <div>
-          <Link className="smallspace button" to="/adduser">
-            Legg til bruker
+        <div className="flex-column">
+          <Link className="smallspace button" to="/users">
+            Brukere
           </Link>
           <Link className="smallspace button" to="/tournaments">
             Turneringer
-          </Link>
-          <Link className="smallspace button" to="/statistics">
-            Statistikk
           </Link>
         </div>
       </Container>

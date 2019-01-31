@@ -41,12 +41,15 @@ export interface Tournament {
 
 export interface AppState {
   tournaments: {
+    loaded: boolean;
     tournaments: TournamentDict;
   };
   matches: {
+    loaded: boolean;
     matches: MatchDict;
   };
   users: {
+    loaded: boolean;
     users: UserDict;
   };
 }

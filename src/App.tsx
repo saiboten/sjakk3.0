@@ -7,17 +7,12 @@ import createHistory from "history/createBrowserHistory";
 
 import { Provider } from "react-redux";
 
-import Login from "./components/login/Login";
-import TournamentPage from "./components/tournament/TournamentPage";
-import ChoosePath from "./components/choosepath/ChoosePath";
-import { UserPageWrapper } from "./components/users/UsersPageWrapper";
-import Tournament from "./components/tournament/Tournament";
-import UserStatistics from "./components/users/UserStatistics";
 import firebase from "./components/firebase/FirebaseInit";
 import { setUsers } from "./state/actions/user";
 import { setTournaments } from "./state/actions/tournaments";
 import { setMatches } from "./state/actions/matches";
 import { tournaments, matches, users } from "./state/reducers";
+import { LoadedWrapper } from "./LoadedWrapper";
 
 const history = createHistory();
 
@@ -70,17 +65,7 @@ firebase
 
 const App = () => (
   <Provider store={store}>
-    <Router>
-      <div>
-        <Route path="/" component={Login} />
-        <Route path="/login" component={Login} />
-        <Route path="/choosepath" component={ChoosePath} />
-        <Route path="/tournaments" component={TournamentPage} />
-        <Route path="/users" component={UserPageWrapper} />
-        <Route path="/tournament/:id" component={Tournament} />
-        <Route path="/user/:id" component={UserStatistics} />
-      </div>
-    </Router>
+    <LoadedWrapper />
   </Provider>
 );
 

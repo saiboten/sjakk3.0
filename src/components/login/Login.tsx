@@ -101,41 +101,26 @@ class Login extends React.Component<Props, State> {
   }
 
   render() {
-    const continuePlease = (
-      <div className="flex-column">
-        <Link className="smallspace button" to="/users">
-          Brukere
-        </Link>
-        <Link className="smallspace button" to="/tournaments">
-          Turneringer
-        </Link>
-      </div>
-    );
-
-    const loginForm = (
-      <form className="select-user__form" onSubmit={this.logIn}>
-        <div className="smallspace">Brukernavn</div>
-        <input
-          className="smallspace"
-          value={this.state.user}
-          onChange={this.updateUserState}
-        />
-        <div className="smallspace">Passord</div>
-        <input
-          type="password"
-          className="smallspace"
-          value={this.state.password}
-          onChange={this.updatePasswordState}
-        />
-        <div className="flex-row space-between">
-          <input className="button" type="submit" value="Logg inn" />
-        </div>
-      </form>
-    );
-
     return (
       <Container>
-        {this.state.loggedin ? continuePlease : loginForm}
+        <form className="select-user__form" onSubmit={this.logIn}>
+          <div className="smallspace">Brukernavn</div>
+          <input
+            className="smallspace"
+            value={this.state.user}
+            onChange={this.updateUserState}
+          />
+          <div className="smallspace">Passord</div>
+          <input
+            type="password"
+            className="smallspace"
+            value={this.state.password}
+            onChange={this.updatePasswordState}
+          />
+          <div className="flex-row space-between">
+            <input className="button" type="submit" value="Logg inn" />
+          </div>
+        </form>
         {this.state.feedback}
       </Container>
     );

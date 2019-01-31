@@ -1,9 +1,17 @@
-const matches = (state = { tournaments: {} }, action: any) => {
+const matches = (
+  state = {
+    tournaments: {
+      loaded: false
+    }
+  },
+  action: any
+) => {
   switch (action.type) {
     case "SET_TOURNAMENTS":
       return {
         ...state,
-        tournaments: action.tournaments
+        tournaments: action.tournaments,
+        loaded: true
       };
     default:
       return state;

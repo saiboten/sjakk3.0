@@ -26,8 +26,8 @@ class MatchRegistration extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      black: "",
-      white: "",
+      black: props.users[0].id,
+      white: props.users[0].id,
       date: moment(),
       feedback: ""
     };
@@ -35,13 +35,6 @@ class MatchRegistration extends React.Component<Props, State> {
     this.submit = this.submit.bind(this);
     this.whiteChanged = this.whiteChanged.bind(this);
     this.blackChanged = this.blackChanged.bind(this);
-  }
-
-  componentWillReceiveProps(props: Props) {
-    this.setState({
-      black: props.users[0].id,
-      white: props.users[0].id
-    });
   }
 
   whiteChanged(e: React.ChangeEvent<HTMLSelectElement>) {
