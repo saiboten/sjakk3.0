@@ -1,14 +1,15 @@
 import React from "react";
 
-import TournamentRegistration, {
-  NewTournamentData
-} from "./TournamentRegistration";
+import { connect } from "react-redux";
+import TournamentRegistration, { NewTournamentData } from "./TournamentRegistration";
 import TournamentList from "./TournamentList";
 import firebase from "../firebase/FirebaseInit";
 import Container from "../container/Container";
-import { TournamentDict } from "../../types";
+import { TournamentDict, AppState } from "../../types";
 
-interface Props {}
+interface Props {
+  loggedin: boolean;
+}
 
 interface State {
   tournaments: TournamentDict;
@@ -51,10 +52,17 @@ class TournamentPage extends React.Component<Props, State> {
   }
 
   render() {
+    const { loggedin } = this.props;
+
     return (
       <Container>
-        <h1>Registrer turnering</h1>
-        <TournamentRegistration callback={TournamentPage.tournamentAdded} />
+        {loggedin && (
+          <>
+            <h1>Registrer turnering</h1>
+            <TournamentRegistration callback={TournamentPage.tournamentAdded} />
+          </>
+        )}
+
         <h1>Turneringsliste</h1>
         <TournamentList tournaments={Object.values(this.state.tournaments)} />
       </Container>
@@ -62,4 +70,11 @@ class TournamentPage extends React.Component<Props, State> {
   }
 }
 
-export default TournamentPage;
+export default connect(
+  (state: AppState) => {
+    return {
+      loggedIn: state.loggedin
+    };
+  },
+  null
+)(TournamentPage);

@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 
 import firebase from "../firebase/FirebaseInit";
 import Container from "../container/Container";
+import { connect } from "react-redux";
+import { logIn } from "../../state/actions/loggedin";
+import { AppState } from "../../types";
 
-interface Props {}
+interface Props {
+  logMeIn: () => void;
+}
 
 interface State {
   user: string;
@@ -13,7 +18,7 @@ interface State {
   loggedin: boolean;
 }
 
-class Login extends React.Component<Props, State> {
+class LoginComponent extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -105,11 +110,7 @@ class Login extends React.Component<Props, State> {
       <Container>
         <form className="select-user__form" onSubmit={this.logIn}>
           <div className="smallspace">Brukernavn</div>
-          <input
-            className="smallspace"
-            value={this.state.user}
-            onChange={this.updateUserState}
-          />
+          <input className="smallspace" value={this.state.user} onChange={this.updateUserState} />
           <div className="smallspace">Passord</div>
           <input
             type="password"
@@ -126,4 +127,10 @@ class Login extends React.Component<Props, State> {
     );
   }
 }
-export default Login;
+
+export const Login = connect(
+  (state: AppState) => ({}),
+  (dispatch: any) => ({
+    logMeIn: () => dispatch(logIn())
+  })
+)(LoginComponent);

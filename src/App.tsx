@@ -11,8 +11,9 @@ import firebase from "./components/firebase/FirebaseInit";
 import { setUsers } from "./state/actions/user";
 import { setTournaments } from "./state/actions/tournaments";
 import { setMatches } from "./state/actions/matches";
-import { tournaments, matches, users } from "./state/reducers";
+import { tournaments, matches, users, loggedin } from "./state/reducers";
 import { LoadedWrapper } from "./LoadedWrapper";
+import { logIn } from "./state/actions/loggedin";
 
 const history = createHistory();
 
@@ -21,7 +22,8 @@ let store = createStore(
   combineReducers({
     tournaments,
     matches,
-    users
+    users,
+    loggedin
   }),
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
   //compose(applyMiddleware(middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
@@ -37,9 +39,7 @@ moment.locale("nb_NO");
 
 const database = firebase.database();
 
-const usersRef = database.ref("users");
-
-usersRef.on(
+database.ref("users").on(
   "value",
   snapshot => {
     if (snapshot && snapshot.val()) {
@@ -51,8 +51,7 @@ usersRef.on(
   }
 );
 
-const matchesRef = database.ref("matches");
-matchesRef.on(
+database.ref("matches").on(
   "value",
   snapshot => {
     if (snapshot && snapshot.val()) {
@@ -64,10 +63,15 @@ matchesRef.on(
   }
 );
 
-const tournamentsRef = database.ref("tournaments");
-tournamentsRef.on("value", snapshot => {
+database.ref("tournaments").on("value", snapshot => {
   if (snapshot && snapshot.val()) {
     store.dispatch(setTournaments(snapshot.val()));
+  }
+});
+
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    store.dispatch(logIn());
   }
 });
 

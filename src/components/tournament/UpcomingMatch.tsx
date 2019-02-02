@@ -4,8 +4,9 @@ import firebase from "../firebase/FirebaseInit";
 import ScoreCalculator from "./ScoreCalculator";
 import MatchHelper from "./MatchHelper";
 import { isPropertySignature } from "typescript";
-import { Match, User } from "../../types";
+import { Match, User, AppState } from "../../types";
 import { RouteComponentProps } from "react-router";
+import { connect } from "react-redux";
 
 require("./upcomingmatch.css");
 
@@ -25,6 +26,7 @@ interface Props {
   white: User;
   black: User;
   match: Match;
+  loggedin: boolean;
 }
 
 interface State {
@@ -104,12 +106,7 @@ class UpcomingMatch extends React.Component<Props, State> {
   }
 
   storeWinner(winner: string) {
-    ScoreCalculator.calculateScore(
-      this.props.white,
-      this.props.black,
-      this.props.match,
-      winner
-    );
+    ScoreCalculator.calculateScore(this.props.white, this.props.black, this.props.match, winner);
   }
 
   deleteMatch() {
@@ -117,18 +114,9 @@ class UpcomingMatch extends React.Component<Props, State> {
       .database()
       .ref(`matches/${this.props.match.id}`)
       .once("value", snapshot => {
-        MatchHelper.deleteListElementFromList(
-          `tournaments/${this.props.tournament}/matches`,
-          this.props.match.id
-        );
-        MatchHelper.deleteListElementFromList(
-          `users/${this.props.match.white}/matches`,
-          this.props.match.id
-        );
-        MatchHelper.deleteListElementFromList(
-          `users/${this.props.match.black}/matches`,
-          this.props.match.id
-        );
+        MatchHelper.deleteListElementFromList(`tournaments/${this.props.tournament}/matches`, this.props.match.id);
+        MatchHelper.deleteListElementFromList(`users/${this.props.match.white}/matches`, this.props.match.id);
+        MatchHelper.deleteListElementFromList(`users/${this.props.match.black}/matches`, this.props.match.id);
         firebase
           .database()
           .ref(`matches/${this.props.match.id}`)
@@ -137,7 +125,7 @@ class UpcomingMatch extends React.Component<Props, State> {
   }
 
   render() {
-    const match = this.props.match;
+    const { loggedin, match } = this.props;
 
     let renderThis = <li>Laster</li>;
 
@@ -167,12 +155,8 @@ class UpcomingMatch extends React.Component<Props, State> {
             onClick={this.whiteWon}
           >
             <div className="flex-column">
-              <div className="completedMatch__names">
-                {this.props.white.name}
-              </div>
-              <div className="completedMatch__rating">
-                {this.props.white.rating}{" "}
-              </div>
+              <div className="completedMatch__names">{this.props.white.name}</div>
+              <div className="completedMatch__rating">{this.props.white.rating} </div>
             </div>
           </button>
           <button
@@ -184,27 +168,24 @@ class UpcomingMatch extends React.Component<Props, State> {
             onClick={this.blackWon}
           >
             <div className="flex-column">
-              <div className="completedMatch__names">
-                {this.props.black.name}
-              </div>
-              <div className="completedMatch__rating">
-                {" "}
-                {this.props.black.rating}
-              </div>
+              <div className="completedMatch__names">{this.props.black.name}</div>
+              <div className="completedMatch__rating"> {this.props.black.rating}</div>
             </div>
           </button>
-          <button
-            className="flex-column button upcomingMatch__remis_button"
-            onClick={this.remisConfirm}
-          >
-            {this.state.remisConfirmed ? "Bekreft" : "Remis"}
-          </button>
-          <span className="flex-column">
-            <button className="button" onClick={this.confirmDelete}>
-              {this.state.confirmedDelete ? "Y" : "X"}
-            </button>
-            {confirmDeleteMatchButton}
-          </span>
+
+          {loggedin && (
+            <>
+              <button className="flex-column button upcomingMatch__remis_button" onClick={this.remisConfirm}>
+                {this.state.remisConfirmed ? "Bekreft" : "Remis"}
+              </button>
+              <span className="flex-column">
+                <button className="button" onClick={this.confirmDelete}>
+                  {this.state.confirmedDelete ? "Y" : "X"}
+                </button>
+                {confirmDeleteMatchButton}
+              </span>
+            </>
+          )}
         </li>
       );
     }
@@ -213,4 +194,9 @@ class UpcomingMatch extends React.Component<Props, State> {
   }
 }
 
-export default UpcomingMatch;
+export default connect(
+  (state: AppState) => ({
+    loggedin: state.loggedin
+  }),
+  null
+)(UpcomingMatch);

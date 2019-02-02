@@ -2,7 +2,8 @@ import React from "react";
 
 import firebase from "../firebase/FirebaseInit";
 import MatchHelper from "./MatchHelper";
-import { Match, User } from "../../types";
+import { Match, User, AppState } from "../../types";
+import { connect } from "react-redux";
 
 require("./completedmatch.css");
 
@@ -11,6 +12,7 @@ interface Props {
   tournament: string;
   white: User;
   black: User;
+  loggedin: boolean;
 }
 
 interface State {
@@ -78,18 +80,9 @@ class CompletedMatch extends React.Component<Props, State> {
       .database()
       .ref(`matches/${this.props.match.id}`)
       .once("value", snapshot => {
-        MatchHelper.deleteListElementFromList(
-          `tournaments/${this.props.tournament}/matches`,
-          this.props.match.id
-        );
-        MatchHelper.deleteListElementFromList(
-          `users/${this.props.match.white}/matches`,
-          this.props.match.id
-        );
-        MatchHelper.deleteListElementFromList(
-          `users/${this.props.match.black}/matches`,
-          this.props.match.id
-        );
+        MatchHelper.deleteListElementFromList(`tournaments/${this.props.tournament}/matches`, this.props.match.id);
+        MatchHelper.deleteListElementFromList(`users/${this.props.match.white}/matches`, this.props.match.id);
+        MatchHelper.deleteListElementFromList(`users/${this.props.match.black}/matches`, this.props.match.id);
         firebase
           .database()
           .ref(`matches/${this.props.match.id}`)
@@ -117,6 +110,7 @@ class CompletedMatch extends React.Component<Props, State> {
 
   render() {
     const match = this.props.match;
+    const { loggedin } = this.props;
 
     const displayNone = {
       display: "none"
@@ -125,10 +119,7 @@ class CompletedMatch extends React.Component<Props, State> {
     let confirmDeleteMatchButton = <span style={displayNone} />;
     if (this.state.confirmedDelete) {
       confirmDeleteMatchButton = (
-        <button
-          className="button completedMatch__deleteMatch__button"
-          onClick={this.cancelConfirmDelete}
-        >
+        <button className="button completedMatch__deleteMatch__button" onClick={this.cancelConfirmDelete}>
           Avbryt
         </button>
       );
@@ -141,9 +132,7 @@ class CompletedMatch extends React.Component<Props, State> {
             <div className="completedMatch__names">{this.props.white.name}</div>
             <div className="completedMatch__rating">
               {match.whiteInitialRating + match.whiteRatingChange}{" "}
-              {match.whiteRatingChange > 0
-                ? `+${match.whiteRatingChange}`
-                : match.whiteRatingChange}{" "}
+              {match.whiteRatingChange > 0 ? `+${match.whiteRatingChange}` : match.whiteRatingChange}{" "}
             </div>
           </div>
         </span>
@@ -153,24 +142,28 @@ class CompletedMatch extends React.Component<Props, State> {
             <div className="completedMatch__rating">
               {" "}
               {match.blackInitialRating + match.blackRatingChange}{" "}
-              {match.blackRatingChange > 0
-                ? `+${match.blackRatingChange}`
-                : match.blackRatingChange}{" "}
+              {match.blackRatingChange > 0 ? `+${match.blackRatingChange}` : match.blackRatingChange}{" "}
             </div>
           </div>
         </span>
         <span className="flex-column space-between">
-          <button
-            className="completedMatch__deleteMatch__button button"
-            onClick={this.confirmDelete}
-          >
-            {this.state.confirmedDelete ? "Bekreft" : "Slett"}
-          </button>
-          {confirmDeleteMatchButton}
+          {loggedin && (
+            <>
+              <button className="completedMatch__deleteMatch__button button" onClick={this.confirmDelete}>
+                {this.state.confirmedDelete ? "Bekreft" : "Slett"}
+              </button>
+              {confirmDeleteMatchButton}
+            </>
+          )}
         </span>
       </li>
     );
   }
 }
 
-export default CompletedMatch;
+export default connect(
+  (state: AppState) => ({
+    loggedin: state.loggedin
+  }),
+  null
+)(CompletedMatch);

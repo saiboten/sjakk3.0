@@ -7,7 +7,7 @@ import ScoreBoard from "./ScoreBoard";
 import AddUserForm from "./AddUserForm";
 import { AppState } from "../../types";
 
-const UsersPage = ({ users }: any) => {
+const UsersPage = ({ users, loggedin }: any) => {
   const userList = Object.values(users);
   const usersElements = userList.map((user: any) => (
     <li key={user.id}>
@@ -20,7 +20,7 @@ const UsersPage = ({ users }: any) => {
   return (
     <Container>
       <ScoreBoard />
-      <AddUserForm />
+      {loggedin && <AddUserForm />}
       <h1>Brukere</h1>
       <ul className="flex-column space-between">{usersElements}</ul>
     </Container>
@@ -30,10 +30,12 @@ const UsersPage = ({ users }: any) => {
 export default connect(
   (state: AppState) => {
     const {
-      users: { users }
+      users: { users },
+      loggedin
     } = state;
     return {
-      users
+      users,
+      loggedin
     };
   },
   dispatch => ({})

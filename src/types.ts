@@ -40,6 +40,7 @@ export interface Tournament {
 }
 
 export interface AppState {
+  loggedin: boolean;
   tournaments: {
     loaded: boolean;
     tournaments: TournamentDict;

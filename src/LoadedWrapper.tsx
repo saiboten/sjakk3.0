@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { AppState } from "./types";
 
-import Login from "./components/login/Login";
+import { Login } from "./components/login/Login";
 import TournamentPage from "./components/tournament/TournamentPage";
 import ChoosePath from "./components/choosepath/ChoosePath";
 import { UserPageWrapper } from "./components/users/UsersPageWrapper";
@@ -31,8 +31,7 @@ const LoadedWrapperComp = ({ ready }: { ready: boolean }) => {
 
 export const LoadedWrapper = connect(
   (state: AppState) => {
-    const ready =
-      state.matches.loaded && state.tournaments.loaded && state.users.loaded;
+    const ready = state.matches.loaded && state.tournaments.loaded && state.users.loaded;
     return {
       ready
     };
