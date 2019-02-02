@@ -36,32 +36,29 @@ require("./global.css");
 
 moment.locale("nb_NO");
 
-firebase
-  .database()
-  .ref("users")
-  .on("value", snapshot => {
-    if (snapshot && snapshot.val()) {
-      store.dispatch(setUsers(snapshot.val()));
-    }
-  });
+const database = firebase.database();
 
-firebase
-  .database()
-  .ref("matches")
-  .on("value", snapshot => {
-    if (snapshot && snapshot.val()) {
-      store.dispatch(setMatches(snapshot.val()));
-    }
-  });
+const usersRef = database.ref("users");
 
-firebase
-  .database()
-  .ref("tournaments")
-  .on("value", snapshot => {
-    if (snapshot && snapshot.val()) {
-      store.dispatch(setTournaments(snapshot.val()));
-    }
-  });
+usersRef.on("value", snapshot => {
+  if (snapshot && snapshot.val()) {
+    store.dispatch(setUsers(snapshot.val()));
+  }
+});
+
+const matchesRef = database.ref("matches");
+matchesRef.on("value", snapshot => {
+  if (snapshot && snapshot.val()) {
+    store.dispatch(setMatches(snapshot.val()));
+  }
+});
+
+const tournamentsRef = database.ref("tournaments");
+tournamentsRef.on("value", snapshot => {
+  if (snapshot && snapshot.val()) {
+    store.dispatch(setTournaments(snapshot.val()));
+  }
+});
 
 const App = () => (
   <Provider store={store}>
