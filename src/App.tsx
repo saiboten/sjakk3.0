@@ -23,8 +23,7 @@ let store = createStore(
     matches,
     users
   }),
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+  (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
   //compose(applyMiddleware(middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 );
 /* eslint-enable */
@@ -40,18 +39,30 @@ const database = firebase.database();
 
 const usersRef = database.ref("users");
 
-usersRef.on("value", snapshot => {
-  if (snapshot && snapshot.val()) {
-    store.dispatch(setUsers(snapshot.val()));
+usersRef.on(
+  "value",
+  snapshot => {
+    if (snapshot && snapshot.val()) {
+      store.dispatch(setUsers(snapshot.val()));
+    }
+  },
+  (error: any) => {
+    console.log(error);
   }
-});
+);
 
 const matchesRef = database.ref("matches");
-matchesRef.on("value", snapshot => {
-  if (snapshot && snapshot.val()) {
-    store.dispatch(setMatches(snapshot.val()));
+matchesRef.on(
+  "value",
+  snapshot => {
+    if (snapshot && snapshot.val()) {
+      store.dispatch(setMatches(snapshot.val()));
+    }
+  },
+  (error: any) => {
+    console.log(error);
   }
-});
+);
 
 const tournamentsRef = database.ref("tournaments");
 tournamentsRef.on("value", snapshot => {
