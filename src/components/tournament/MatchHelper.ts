@@ -1,7 +1,7 @@
 import firebase from "../firebase/FirebaseInit";
 
 class MatchHelper {
-  static deleteListElementFromList(ref, itemid) {
+  static deleteListElementFromList(ref: any, itemid: any) {
     firebase
       .database()
       .ref(ref)
