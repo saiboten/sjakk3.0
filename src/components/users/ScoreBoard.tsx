@@ -1,54 +1,77 @@
 import React from "react";
+import styled from "styled-components";
 
-import firebase from "../firebase/FirebaseInit";
-import { User } from "../../types";
+import { User, AppState, UserDict } from "../../types";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-interface Props {}
-
-interface State {
-  users: User[];
+interface Props {
+  users: UserDict;
 }
 
-class ScoreBoard extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      users: []
-    };
+const StyledListElement = styled(Link)`
+  width: 100%;
+  display: flex;
+  padding: 5px 0;
+  justify-content: space-around;
+  border-left: 1px solid #b7b7b7;
+  border-right: 1px solid #b7b7b7;
+
+  &:visited,
+  &:link {
+    text-decoration: none;
+    color: inherit;
+    font-size: 20px;
   }
 
-  componentDidMount() {
-    firebase
-      .database()
-      .ref("users")
-      .on("value", snapshot => {
-        const users = snapshot && snapshot.val();
-        this.setState({
-          users: Object.values(users)
-        });
-      });
+  &:nth-child(odd) {
+    background-color: #b7b7b7;
   }
 
+  &:last-child {
+    border-bottom: 1px solid #b7b7b7;
+  }
+
+  &:hover {
+    background-color: grey;
+  }
+`;
+
+const StyledName = styled.span`
+  flex-basis: 50%;
+  text-align: center;
+`;
+
+const StyledRating = styled.span`
+  flex-basis: 50%;
+  text-align: center;
+`;
+
+class ScoreBoard extends React.Component<Props> {
   render() {
-    let copyList = this.state.users.slice();
+    const sortedList = [...Object.values(this.props.users)].sort((a: User, b: User) => b.rating - a.rating);
 
-    copyList = copyList.sort((a: User, b: User) => b.rating - a.rating);
-
-    const scoreboardlist = copyList
+    const scoreboardlist = sortedList
       .filter((user: User) => user.matches && Object.keys(user.matches).length > 0)
       .map(user => (
-        <li key={user.id}>
-          {user.name} - {user.rating}
-        </li>
+        <StyledListElement key={user.id} to={`/user/${user.id}`}>
+          <StyledName>{user.name}</StyledName>
+          <StyledRating>{user.rating}</StyledRating>
+        </StyledListElement>
       ));
 
     return (
       <div>
         <h1>Ratingoversikt</h1>
-        <ul className="flex-column">{scoreboardlist}</ul>
+        <div className="flex-column">{scoreboardlist}</div>
       </div>
     );
   }
 }
 
-export default ScoreBoard;
+export default connect(
+  (state: AppState) => ({
+    users: state.users.users
+  }),
+  null
+)(ScoreBoard);
