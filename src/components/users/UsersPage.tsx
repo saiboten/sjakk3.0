@@ -2,10 +2,10 @@ import React from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import Container from "../container/Container";
 import ScoreBoard from "./ScoreBoard";
 import AddUserForm from "./AddUserForm";
 import { AppState } from "../../types";
+import { StyledContainer } from "../styled/StyledContainer";
 
 const UsersPage = ({ users, loggedin }: any) => {
   const userList = Object.values(users);
@@ -18,12 +18,12 @@ const UsersPage = ({ users, loggedin }: any) => {
   ));
 
   return (
-    <Container>
+    <StyledContainer>
       <ScoreBoard />
       {loggedin && <AddUserForm />}
       <h1>Brukere</h1>
       <ul className="flex-column space-between">{usersElements}</ul>
-    </Container>
+    </StyledContainer>
   );
 };
 

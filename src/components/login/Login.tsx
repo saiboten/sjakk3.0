@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import firebase from "../firebase/FirebaseInit";
-import Container from "../container/Container";
 import { connect } from "react-redux";
 import { logIn } from "../../state/actions/loggedin";
 import { AppState } from "../../types";
+import { StyledContainer } from "../styled/StyledContainer";
 
 interface Props {
   logMeIn: () => void;
@@ -107,7 +107,7 @@ class LoginComponent extends React.Component<Props, State> {
 
   render() {
     return (
-      <Container>
+      <StyledContainer>
         <form className="select-user__form" onSubmit={this.logIn}>
           <div className="smallspace">Brukernavn</div>
           <input className="smallspace" value={this.state.user} onChange={this.updateUserState} />
@@ -123,7 +123,7 @@ class LoginComponent extends React.Component<Props, State> {
           </div>
         </form>
         {this.state.feedback}
-      </Container>
+      </StyledContainer>
     );
   }
 }

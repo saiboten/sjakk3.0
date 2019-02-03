@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import Container from "../container/Container";
 import UserMatchesList from "./UserMatchesList";
 import { Match, User, AppState } from "../../types";
 import { RouteComponentProps } from "react-router";
+import { StyledContainer } from "../styled/StyledContainer";
 
 interface MatchParams {
   id: string;
@@ -62,21 +62,15 @@ class UserStatistics extends React.Component<Props, State> {
         return lostMatches + lost;
       }, 0);
 
-      ties = userMatches.reduce(
-        (tiedMatches: number, oneMatch: Match) =>
-          tiedMatches + (oneMatch.remis ? 1 : 0),
-        0
-      );
+      ties = userMatches.reduce((tiedMatches: number, oneMatch: Match) => tiedMatches + (oneMatch.remis ? 1 : 0), 0);
 
       winsAsBlack = userMatches.reduce(
-        (gamesTotal: number, oneMatch: Match) =>
-          gamesTotal + (oneMatch.black === userId && oneMatch.blackWon ? 1 : 0),
+        (gamesTotal: number, oneMatch: Match) => gamesTotal + (oneMatch.black === userId && oneMatch.blackWon ? 1 : 0),
         0
       );
 
       winsAsWhite = userMatches.reduce(
-        (gamesTotal: number, oneMatch: Match) =>
-          gamesTotal + (oneMatch.white === userId && oneMatch.whiteWon ? 1 : 0),
+        (gamesTotal: number, oneMatch: Match) => gamesTotal + (oneMatch.white === userId && oneMatch.whiteWon ? 1 : 0),
         0
       );
 
@@ -84,7 +78,7 @@ class UserStatistics extends React.Component<Props, State> {
     }
 
     return (
-      <Container>
+      <StyledContainer>
         <h1>Brukerstatistikk for {user.name}</h1>
         <ul className="flex-column">
           <li>Rating: {user.rating}</li>
@@ -100,17 +94,12 @@ class UserStatistics extends React.Component<Props, State> {
         <ul>
           <h1>Kamper</h1>
           {users[userId] && users[userId].matches ? (
-            <UserMatchesList
-              tournaments={tournaments}
-              matches={matches}
-              users={users}
-              user={userId}
-            />
+            <UserMatchesList tournaments={tournaments} matches={matches} users={users} user={userId} />
           ) : (
             ""
           )}
         </ul>
-      </Container>
+      </StyledContainer>
     );
   }
 }

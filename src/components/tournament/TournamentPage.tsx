@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import TournamentRegistration, { NewTournamentData } from "./TournamentRegistration";
 import TournamentList from "./TournamentList";
 import firebase from "../firebase/FirebaseInit";
-import Container from "../container/Container";
 import { TournamentDict, AppState } from "../../types";
+import { StyledContainer } from "../styled/StyledContainer";
 
 interface Props {
   loggedin: boolean;
@@ -55,7 +55,7 @@ class TournamentPage extends React.Component<Props, State> {
     const { loggedin } = this.props;
 
     return (
-      <Container>
+      <StyledContainer>
         {loggedin && (
           <>
             <h1>Registrer turnering</h1>
@@ -65,7 +65,7 @@ class TournamentPage extends React.Component<Props, State> {
 
         <h1>Turneringsliste</h1>
         <TournamentList tournaments={Object.values(this.state.tournaments)} />
-      </Container>
+      </StyledContainer>
     );
   }
 }
@@ -73,7 +73,7 @@ class TournamentPage extends React.Component<Props, State> {
 export default connect(
   (state: AppState) => {
     return {
-      loggedIn: state.loggedin
+      loggedin: state.loggedin
     };
   },
   null

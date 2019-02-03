@@ -1,23 +1,30 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { StyledContainer } from "../styled/StyledContainer";
 
-import Container from "../container/Container";
+const StyledWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
-require("./choosepath.css");
+const StyledLink = styled(Link)`
+  padding: 5px;
+`;
 
 class ChoosePath extends React.Component {
   render() {
     return (
-      <Container>
-        <div className="flex-column">
+      <StyledContainer>
+        <StyledWrapper>
           <Link className="smallspace button" to="/users">
             Brukere
           </Link>
           <Link className="smallspace button" to="/tournaments">
             Turneringer
           </Link>
-        </div>
-      </Container>
+        </StyledWrapper>
+      </StyledContainer>
     );
   }
 }

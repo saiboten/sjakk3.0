@@ -5,9 +5,9 @@ import { connect } from "react-redux";
 import MatchList from "./MatchList";
 import MatchRegistration from "./MatchRegistration";
 import firebase from "../firebase/FirebaseInit";
-import Container from "../container/Container";
 import { MatchDict, TournamentDict, AppState, UserDict } from "../../types";
 import { RouteComponentProps } from "react-router";
+import { StyledContainer } from "../styled/StyledContainer";
 
 require("./tournament.css");
 
@@ -27,6 +27,7 @@ interface Props extends RouteComponentProps<MatchParams> {
   users: UserDict;
   tournaments: TournamentDict;
   matches: MatchDict;
+  loggedin: boolean;
 }
 
 interface State {}
@@ -109,9 +110,7 @@ class Tournament extends React.Component<Props, State> {
     Tournament.storeMatchInUserList(matchData.black, newMatch.id);
     Tournament.storeNewMatch(newMatch);
 
-    const tournamentMatches = firebase
-      .database()
-      .ref(`tournaments/${this.props.match.params.id}/matches`);
+    const tournamentMatches = firebase.database().ref(`tournaments/${this.props.match.params.id}/matches`);
 
     tournamentMatches.once("value", snapshot => {
       if (snapshot.val()) {
@@ -133,27 +132,25 @@ class Tournament extends React.Component<Props, State> {
   }
 
   render() {
-    const { match, tournaments, users, matches } = this.props;
+    const { match, tournaments, users, matches, loggedin } = this.props;
 
     return (
-      <Container>
-        <h1>Registrer kamp</h1>
-        <MatchRegistration
-          callback={this.addMatch}
-          users={Object.values(users)}
-        />
+      <StyledContainer>
+        {loggedin && (
+          <>
+            <h1>Registrer kamp</h1>
+            <MatchRegistration callback={this.addMatch} users={Object.values(users)} />
+          </>
+        )}
+
         <h1>Kampliste</h1>
         <MatchList
           tournament={match.params.id}
           users={users}
           matches={matches}
-          matchesIDs={
-            tournaments[match.params.id]
-              ? tournaments[match.params.id].matches
-              : []
-          }
+          matchesIDs={tournaments[match.params.id] ? tournaments[match.params.id].matches : []}
         />
-      </Container>
+      </StyledContainer>
     );
   }
 }
@@ -163,12 +160,14 @@ export default connect(
     const {
       users: { users },
       matches: { matches },
-      tournaments: { tournaments }
+      tournaments: { tournaments },
+      loggedin
     } = state;
     return {
       users,
       matches,
-      tournaments
+      tournaments,
+      loggedin
     };
   },
   dispatch => ({})

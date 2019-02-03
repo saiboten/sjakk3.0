@@ -1,8 +1,10 @@
-.sjakk-main__container {
+import styled from "styled-components";
+
+export const StyledContainer = styled.div`
   width: 275px;
   margin: 10px auto;
   border: 1px solid black;
   padding: 10px;
   border-radius: 5px;
   background-color: white;
-}
+`;
