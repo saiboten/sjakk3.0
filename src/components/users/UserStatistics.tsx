@@ -114,8 +114,8 @@ class UserStatistics extends React.Component<Props, State> {
 
         <ul className="flex-column">
           <li>Rating: {user.rating}</li>
-          <li>Høyeste rating {minRating}</li>
-          <li>Laveste rating: {maxRating}</li>
+          <li>Høyeste rating {maxRating}</li>
+          <li>Laveste rating: {minRating}</li>
           <br />
           <li>Antall kamper: {matchesPlayed}</li>
           <li>Seire: {wins}</li>
