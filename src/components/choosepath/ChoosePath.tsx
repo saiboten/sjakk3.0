@@ -27,11 +27,8 @@ class ChoosePath extends React.Component {
       <StyledContainer>
         <StyledWrapper>
           <StyledHeader>Sjakk og Whiskey-klubben</StyledHeader>
-          <Link className="smallspace button" to="/users">
-            Brukere
-          </Link>
-          <Link className="smallspace button" to="/tournaments">
-            Turneringer
+          <Link className="smallspace button" to="/">
+            Oversikt
           </Link>
         </StyledWrapper>
       </StyledContainer>

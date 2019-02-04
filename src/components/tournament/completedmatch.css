@@ -1,8 +1,8 @@
 .completedMatch__tie {
   border: 2px solid black;
   padding: 5px;
-  flex-basis: 3.5em;
-  text-align: left;
+  text-align: center;
+  flex: 1;
 }
 
 .completedMatch__won {
@@ -10,8 +10,8 @@
   background-color: green;
   border: 2px solid #092900;
   padding: 5px;
-  flex-basis: 3.5em;
-  text-align: left;
+  text-align: center;
+  flex: 1;
 }
 
 .completedMatch__lost {
@@ -19,8 +19,8 @@
   background-color: red;
   border: 2px solid #092900;
   padding: 5px;
-  flex-basis: 3.5em;
-  text-align: left;
+  text-align: center;
+  flex: 1;
 }
 
 .completedMatch__names {

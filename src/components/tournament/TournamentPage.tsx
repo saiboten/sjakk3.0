@@ -55,7 +55,7 @@ class TournamentPage extends React.Component<Props, State> {
     const { loggedin } = this.props;
 
     return (
-      <StyledContainer>
+      <>
         {loggedin && (
           <>
             <h1>Registrer turnering</h1>
@@ -65,7 +65,7 @@ class TournamentPage extends React.Component<Props, State> {
 
         <h1>Turneringsliste</h1>
         <TournamentList tournaments={Object.values(this.state.tournaments)} />
-      </StyledContainer>
+      </>
     );
   }
 }

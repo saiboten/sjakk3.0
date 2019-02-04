@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { AppState } from "./types";
 
 import { Login } from "./components/login/Login";
@@ -17,14 +17,16 @@ const LoadedWrapperComp = ({ ready }: { ready: boolean }) => {
 
   return (
     <Router>
-      <div>
-        <Route path="/" component={ChoosePath} />
-        <Route path="/login" component={Login} />
-        <Route path="/tournaments" component={TournamentPage} />
-        <Route path="/users" component={UserPageWrapper} />
-        <Route path="/tournament/:id" component={Tournament} />
-        <Route path="/user/:id" component={UserStatistics} />
-      </div>
+      <>
+        <ChoosePath />
+        <Switch>
+          <Route path="/" exact component={UserPageWrapper} />
+          <Route path="/login" component={Login} />
+          <Route path="/tournaments" component={TournamentPage} />
+          <Route path="/tournament/:id" component={Tournament} />
+          <Route path="/user/:id" component={UserStatistics} />
+        </Switch>
+      </>
     </Router>
   );
 };

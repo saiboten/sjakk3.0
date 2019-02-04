@@ -6,12 +6,14 @@ import ScoreBoard from "./ScoreBoard";
 import AddUserForm from "./AddUserForm";
 import { AppState } from "../../types";
 import { StyledContainer } from "../styled/StyledContainer";
+import TournamentPage from "../tournament/TournamentPage";
 
 const UsersPage = ({ loggedin }: any) => {
   return (
     <StyledContainer>
       <ScoreBoard />
       {loggedin && <AddUserForm />}
+      <TournamentPage />
     </StyledContainer>
   );
 };
