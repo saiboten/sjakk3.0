@@ -1,10 +1,11 @@
 import React from "react";
 
+import moment from "moment";
 import { connect } from "react-redux";
 import TournamentRegistration, { NewTournamentData } from "./TournamentRegistration";
 import TournamentList from "./TournamentList";
 import firebase from "../firebase/FirebaseInit";
-import { TournamentDict, AppState } from "../../types";
+import { TournamentDict, AppState, Tournament } from "../../types";
 import { StyledContainer } from "../styled/StyledContainer";
 
 interface Props {
@@ -13,6 +14,12 @@ interface Props {
 
 interface State {
   tournaments: TournamentDict;
+}
+
+function sortTournamentByDate(inputList: Tournament[]) {
+  return inputList.sort((tournament1: Tournament, tournament2: Tournament) =>
+    moment.utc(tournament2.date).diff(moment.utc(tournament1.date))
+  );
 }
 
 class TournamentPage extends React.Component<Props, State> {
@@ -64,7 +71,7 @@ class TournamentPage extends React.Component<Props, State> {
         )}
 
         <h1>Turneringsliste</h1>
-        <TournamentList tournaments={Object.values(this.state.tournaments)} />
+        <TournamentList tournaments={sortTournamentByDate(Object.values(this.state.tournaments))} />
       </>
     );
   }

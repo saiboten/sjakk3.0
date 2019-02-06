@@ -1,11 +1,12 @@
 import React from "react";
 import { any, array } from "prop-types"; // ES6
 import { connect } from "react-redux";
+import moment from "moment";
 
 import MatchList from "./MatchList";
 import MatchRegistration from "./MatchRegistration";
 import firebase from "../firebase/FirebaseInit";
-import { MatchDict, TournamentDict, AppState, UserDict } from "../../types";
+import { MatchDict, TournamentDict, AppState, UserDict, Tournament as TournamentType } from "../../types";
 import { RouteComponentProps } from "react-router";
 import { StyledContainer } from "../styled/StyledContainer";
 
@@ -28,6 +29,7 @@ interface Props extends RouteComponentProps<MatchParams> {
   tournaments: TournamentDict;
   matches: MatchDict;
   loggedin: boolean;
+  tournament: TournamentType;
 }
 
 interface State {}
@@ -132,7 +134,7 @@ class Tournament extends React.Component<Props, State> {
   }
 
   render() {
-    const { match, tournaments, users, matches, loggedin } = this.props;
+    const { match, tournaments, users, matches, loggedin, tournament } = this.props;
 
     return (
       <StyledContainer>
@@ -142,7 +144,8 @@ class Tournament extends React.Component<Props, State> {
             <MatchRegistration callback={this.addMatch} users={Object.values(users)} />
           </>
         )}
-
+        <h1>{tournament.name}</h1>
+        <p>Dato: {moment(tournament.date).format("DD.MM.YYYY")}</p>
         <h1>Kampliste</h1>
         <MatchList
           tournament={match.params.id}
@@ -156,7 +159,7 @@ class Tournament extends React.Component<Props, State> {
 }
 
 export default connect(
-  (state: AppState) => {
+  (state: AppState, ownProps: any) => {
     const {
       users: { users },
       matches: { matches },
@@ -167,6 +170,7 @@ export default connect(
       users,
       matches,
       tournaments,
+      tournament: tournaments[ownProps.match.params.id],
       loggedin
     };
   },
