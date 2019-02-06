@@ -4,7 +4,7 @@ import UserMatchesList from "./UserMatchesList";
 import { Match, User, AppState } from "../../types";
 import { RouteComponentProps } from "react-router";
 import { StyledContainer } from "../styled/StyledContainer";
-import { LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line } from "recharts";
+import { LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, ResponsiveContainer } from "recharts";
 
 interface MatchParams {
   id: string;
@@ -102,15 +102,16 @@ class UserStatistics extends React.Component<Props, State> {
     return (
       <StyledContainer>
         <h1>Brukerstatistikk for {user.name}</h1>
-
-        <LineChart width={730} height={250} data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis />
-          <YAxis dataKey="a" type="number" domain={["dataMin - 100", "dataMax + 100"]} />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="a" stroke="#8884d8" />
-        </LineChart>
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis />
+            <YAxis dataKey="a" type="number" domain={["dataMin - 100", "dataMax + 100"]} />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="a" stroke="#8884d8" />
+          </LineChart>
+        </ResponsiveContainer>
 
         <ul className="flex-column">
           <li>Rating: {user.rating}</li>

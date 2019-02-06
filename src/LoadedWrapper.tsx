@@ -9,11 +9,12 @@ import ChoosePath from "./components/choosepath/ChoosePath";
 import { UserPageWrapper } from "./components/users/UsersPageWrapper";
 import Tournament from "./components/tournament/Tournament";
 import UserStatistics from "./components/users/UserStatistics";
+import { Loader } from "./components/Loader";
 
 const LoadedWrapperComp = ({ ready }: { ready: boolean }) => {
-  if (!ready) {
-    return <p>Laster</p>;
-  }
+  // if (!ready) {
+  return <Loader />;
+  // }
 
   return (
     <Router>
@@ -22,7 +23,6 @@ const LoadedWrapperComp = ({ ready }: { ready: boolean }) => {
         <Switch>
           <Route path="/" exact component={UserPageWrapper} />
           <Route path="/login" component={Login} />
-          <Route path="/tournaments" component={TournamentPage} />
           <Route path="/tournament/:id" component={Tournament} />
           <Route path="/user/:id" component={UserStatistics} />
         </Switch>
