@@ -12,9 +12,9 @@ import UserStatistics from "./components/users/UserStatistics";
 import { Loader } from "./components/Loader";
 
 const LoadedWrapperComp = ({ ready }: { ready: boolean }) => {
-  // if (!ready) {
-  return <Loader />;
-  // }
+  if (!ready) {
+    return <Loader />;
+  }
 
   return (
     <Router>
