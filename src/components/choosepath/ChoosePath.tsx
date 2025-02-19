@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { StyledContainer } from "../styled/StyledContainer";
+import { NavLink } from "react-router";
 
 const StyledWrapper = styled.div`
   display: flex;
@@ -13,7 +13,7 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(NavLink)`
   padding: 5px;
 `;
 
@@ -27,9 +27,9 @@ class ChoosePath extends React.Component {
       <StyledContainer>
         <StyledWrapper>
           <StyledHeader>Sjakk og Whiskey-klubben</StyledHeader>
-          <Link className="smallspace button" to="/">
+          <NavLink className="smallspace button" to="/">
             Oversikt
-          </Link>
+          </NavLink>
         </StyledWrapper>
       </StyledContainer>
     );

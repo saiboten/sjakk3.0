@@ -3,10 +3,9 @@ import React from "react";
 import firebase from "../firebase/FirebaseInit";
 import ScoreCalculator from "./ScoreCalculator";
 import MatchHelper from "./MatchHelper";
-import { isPropertySignature } from "typescript";
 import { Match, User, AppState } from "../../types";
-import { RouteComponentProps } from "react-router";
 import { connect } from "react-redux";
+import { getDatabase, ref, remove } from "firebase/database";
 
 require("./upcomingmatch.css");
 
@@ -45,7 +44,7 @@ class UpcomingMatch extends React.Component<Props, State> {
       remisConfirmed: false,
       whiteWonConfirmed: false,
       blackWonConfirmed: false,
-      confirmedDelete: false
+      confirmedDelete: false,
     };
 
     this.storeWinner = this.storeWinner.bind(this);
@@ -62,13 +61,13 @@ class UpcomingMatch extends React.Component<Props, State> {
     }
 
     this.setState({
-      confirmedDelete: true
+      confirmedDelete: true,
     });
   }
 
   cancelConfirmDelete() {
     this.setState({
-      confirmedDelete: false
+      confirmedDelete: false,
     });
   }
 
@@ -79,7 +78,7 @@ class UpcomingMatch extends React.Component<Props, State> {
     this.setState({
       remisConfirmed: true,
       whiteWonConfirmed: false,
-      blackWonConfirmed: false
+      blackWonConfirmed: false,
     });
   }
 
@@ -90,7 +89,7 @@ class UpcomingMatch extends React.Component<Props, State> {
     this.setState({
       blackWonConfirmed: true,
       whiteWonConfirmed: false,
-      remisConfirmed: false
+      remisConfirmed: false,
     });
   }
 
@@ -101,7 +100,7 @@ class UpcomingMatch extends React.Component<Props, State> {
     this.setState({
       whiteWonConfirmed: true,
       blackWonConfirmed: false,
-      remisConfirmed: false
+      remisConfirmed: false,
     });
   }
 
@@ -113,14 +112,12 @@ class UpcomingMatch extends React.Component<Props, State> {
     firebase
       .database()
       .ref(`matches/${this.props.match.id}`)
-      .once("value", snapshot => {
+      .once("value", (snapshot) => {
         MatchHelper.deleteListElementFromList(`tournaments/${this.props.tournament}/matches`, this.props.match.id);
         MatchHelper.deleteListElementFromList(`users/${this.props.match.white}/matches`, this.props.match.id);
         MatchHelper.deleteListElementFromList(`users/${this.props.match.black}/matches`, this.props.match.id);
-        firebase
-          .database()
-          .ref(`matches/${this.props.match.id}`)
-          .remove();
+        const matchRef = ref(getDatabase(firebase), `matches/${this.props.match.id}`);
+        remove(matchRef);
       });
   }
 
@@ -130,7 +127,7 @@ class UpcomingMatch extends React.Component<Props, State> {
     let renderThis = <li>Laster</li>;
 
     const displayNone = {
-      display: "none"
+      display: "none",
     };
 
     let confirmDeleteMatchButton = <span style={displayNone} />;
@@ -196,7 +193,7 @@ class UpcomingMatch extends React.Component<Props, State> {
 
 export default connect(
   (state: AppState) => ({
-    loggedin: state.loggedin
+    loggedin: state.loggedin,
   }),
   null
 )(UpcomingMatch);

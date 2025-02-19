@@ -2,15 +2,18 @@ import React from "react";
 import { connect } from "react-redux";
 import UserMatchesList from "./UserMatchesList";
 import { Match, User, AppState } from "../../types";
-import { RouteComponentProps } from "react-router";
 import { StyledContainer } from "../styled/StyledContainer";
 import { LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line, ResponsiveContainer } from "recharts";
 
 interface MatchParams {
-  id: string;
+  match: {
+    params: {
+      id: string;
+    };
+  };
 }
 
-interface Props extends RouteComponentProps<MatchParams> {
+interface Props extends MatchParams {
   matches: any;
   tournaments: any;
   users: any;
@@ -80,7 +83,7 @@ class UserStatistics extends React.Component<Props, State> {
       a:
         match.white === userId
           ? match.whiteInitialRating + match.whiteRatingChange
-          : match.blackInitialRating + match.blackRatingChange
+          : match.blackInitialRating + match.blackRatingChange,
     }));
 
     const minRating = userMatches.reduce(
@@ -149,7 +152,7 @@ export default connect(
     const {
       tournaments: { tournaments },
       users: { users },
-      matches: { matches }
+      matches: { matches },
     } = state;
 
     const user: User = users[ownProps.match.params.id];
@@ -158,8 +161,8 @@ export default connect(
       matches,
       users,
       user,
-      tournaments
+      tournaments,
     };
   },
-  dispatch => ({})
+  (dispatch) => ({})
 )(UserStatistics);

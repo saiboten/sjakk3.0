@@ -6,8 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import firebase from "../firebase/FirebaseInit";
 import { User } from "../../types";
 import { string } from "prop-types";
-
-const uuidv1 = require("uuid/v1");
+import { v4 } from "uuid";
+import { get, getDatabase, off, ref } from "firebase/database";
 
 export interface NewTournamentData {
   date: string;
@@ -37,7 +37,7 @@ class TournamentRegistration extends React.Component<Props, State> {
       name: "",
       host: "",
       date: moment().toDate(),
-      users: []
+      users: [],
     };
 
     this.submit = this.submit.bind(this);
@@ -52,35 +52,35 @@ class TournamentRegistration extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    this.fireBaseUser.off();
+    off(this.fireBaseUser);
   }
 
   loadUsers() {
-    this.fireBaseUser = firebase.database().ref("users");
-    this.fireBaseUser.on("value", (snapshot: any) => {
+    this.fireBaseUser = ref(getDatabase(firebase), "users");
+    get(this.fireBaseUser).then((snapshot) => {
       if (snapshot.val()) {
         this.setState({
-          users: Object.values(snapshot.val())
+          users: Object.values(snapshot.val()),
         });
       }
     });
   }
 
-  dateChanged(date: Date) {
+  dateChanged(date: Date | null) {
     this.setState({
-      date
+      date,
     });
   }
 
   nameChanged(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      name: e.target.value
+      name: e.target.value,
     });
   }
 
   hostChanged(e: React.ChangeEvent<HTMLSelectElement>) {
     this.setState({
-      host: e.target.value
+      host: e.target.value,
     });
   }
 
@@ -90,12 +90,12 @@ class TournamentRegistration extends React.Component<Props, State> {
       date: moment(this.state.date).format(),
       host: this.state.host,
       name: this.state.name,
-      id: uuidv1()
+      id: v4(),
     });
   }
 
   render() {
-    const options = this.state.users.map(user => (
+    const options = this.state.users.map((user) => (
       <option key={user.id} value={user.id}>
         {user.name}
       </option>
@@ -105,11 +105,7 @@ class TournamentRegistration extends React.Component<Props, State> {
       <form onSubmit={this.submit}>
         <div className="flex-row space-between smallspace">
           <label htmlFor="name">Navn</label>
-          <input
-            id="name"
-            onChange={this.nameChanged}
-            value={this.state.name}
-          />
+          <input id="name" onChange={this.nameChanged} value={this.state.name} />
         </div>
         <div className="flex-row space-between smallspace">
           <label htmlFor="host">Vert</label>
@@ -119,11 +115,7 @@ class TournamentRegistration extends React.Component<Props, State> {
         </div>
         <div className="flex-row space-between smallspace">
           <label htmlFor="date">Dato</label>
-          <DatePicker
-            id="date"
-            selected={this.state.date}
-            onChange={this.dateChanged}
-          />
+          <DatePicker id="date" selected={this.state.date} onChange={this.dateChanged} />
         </div>
         <input className="button" type="submit" value="Legg til" />
       </form>

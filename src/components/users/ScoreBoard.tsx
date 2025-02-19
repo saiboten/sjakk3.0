@@ -3,13 +3,13 @@ import styled from "styled-components";
 
 import { User, AppState, UserDict } from "../../types";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router";
 
 interface Props {
   users: UserDict;
 }
 
-const StyledListElement = styled(Link)`
+const StyledListElement = styled(NavLink)`
   width: 100%;
   display: flex;
   padding: 5px 0;
@@ -53,7 +53,7 @@ class ScoreBoard extends React.Component<Props> {
 
     const scoreboardlist = sortedList
       .filter((user: User) => user.matches && Object.keys(user.matches).length > 0)
-      .map(user => (
+      .map((user) => (
         <StyledListElement key={user.id} to={`/user/${user.id}`}>
           <StyledName>{user.name}</StyledName>
           <StyledRating>{user.rating}</StyledRating>
@@ -71,7 +71,7 @@ class ScoreBoard extends React.Component<Props> {
 
 export default connect(
   (state: AppState) => ({
-    users: state.users.users
+    users: state.users.users,
   }),
   null
 )(ScoreBoard);

@@ -1,13 +1,13 @@
 import React from "react";
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import moment from "moment";
 import { createStore, combineReducers } from "redux";
-import createHistory from "history/createBrowserHistory";
+import { getDatabase, onValue, ref } from "firebase/database";
 
 import { Provider } from "react-redux";
 
 import firebase from "./components/firebase/FirebaseInit";
+
 import { setUsers } from "./state/actions/user";
 import { setTournaments } from "./state/actions/tournaments";
 import { setMatches } from "./state/actions/matches";
@@ -15,15 +15,13 @@ import { tournaments, matches, users, loggedin } from "./state/reducers";
 import { LoadedWrapper } from "./LoadedWrapper";
 import { logIn } from "./state/actions/loggedin";
 
-const history = createHistory();
-
 /* eslint-disable no-underscore-dangle */
 let store = createStore(
   combineReducers({
     tournaments,
     matches,
     users,
-    loggedin
+    loggedin,
   }),
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__()
   //compose(applyMiddleware(middleware), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
@@ -37,11 +35,13 @@ require("./global.css");
 
 moment.locale("nb_NO");
 
-const database = firebase.database();
+const database = getDatabase(firebase);
 
-database.ref("users").on(
-  "value",
-  snapshot => {
+const userRef = ref(database, "users");
+
+onValue(
+  userRef,
+  (snapshot: any) => {
     if (snapshot && snapshot.val()) {
       store.dispatch(setUsers(snapshot.val()));
     }
@@ -51,9 +51,11 @@ database.ref("users").on(
   }
 );
 
-database.ref("matches").on(
-  "value",
-  snapshot => {
+const matchesRef = ref(database, "matches");
+
+onValue(
+  matchesRef,
+  (snapshot) => {
     if (snapshot && snapshot.val()) {
       store.dispatch(setMatches(snapshot.val()));
     }
@@ -63,13 +65,14 @@ database.ref("matches").on(
   }
 );
 
-database.ref("tournaments").on("value", snapshot => {
+const tournamentsRef = ref(database, "tournaments");
+onValue(tournamentsRef, (snapshot) => {
   if (snapshot && snapshot.val()) {
     store.dispatch(setTournaments(snapshot.val()));
   }
 });
 
-firebase.auth().onAuthStateChanged(user => {
+firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     store.dispatch(logIn());
   }

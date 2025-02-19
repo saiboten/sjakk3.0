@@ -1,5 +1,5 @@
 import React from "react";
-import { Match, User } from "../../types";
+import { Match } from "../../types";
 
 const findPlayerCssClass = (white: boolean, match: Match) => {
   const youWon = (white && match.whiteWon) || (!white && match.blackWon);
@@ -18,9 +18,7 @@ const UserMatchesList = ({ matches, user, users }: any) => {
   if (users && matches && user) {
     let userMatches = users[user].matches.map((match: any) => matches[match]);
 
-    userMatches = userMatches.filter(
-      (oneMatch: Match) => oneMatch && oneMatch.completed
-    );
+    userMatches = userMatches.filter((oneMatch: Match) => oneMatch && oneMatch.completed);
 
     ratingProgress = userMatches.map((oneMatch: Match) => {
       const white = users[oneMatch.white];
@@ -28,16 +26,10 @@ const UserMatchesList = ({ matches, user, users }: any) => {
 
       let wonOrLost = "Uavgjort";
 
-      if (
-        (oneMatch.white === user && oneMatch.whiteWon) ||
-        (oneMatch.black === user && oneMatch.blackWon)
-      ) {
+      if ((oneMatch.white === user && oneMatch.whiteWon) || (oneMatch.black === user && oneMatch.blackWon)) {
         wonOrLost = "Seier";
       }
-      if (
-        (oneMatch.white === user && oneMatch.blackWon) ||
-        (oneMatch.black === user && oneMatch.whiteWon)
-      ) {
+      if ((oneMatch.white === user && oneMatch.blackWon) || (oneMatch.black === user && oneMatch.whiteWon)) {
         wonOrLost = "Tap";
       }
 
@@ -48,9 +40,7 @@ const UserMatchesList = ({ matches, user, users }: any) => {
               <div className="completedMatch__names">{white.name}</div>
               <div className="completedMatch__rating">
                 {oneMatch.whiteInitialRating + oneMatch.whiteRatingChange}{" "}
-                {oneMatch.whiteRatingChange > 0
-                  ? `+${oneMatch.whiteRatingChange}`
-                  : oneMatch.whiteRatingChange}{" "}
+                {oneMatch.whiteRatingChange > 0 ? `+${oneMatch.whiteRatingChange}` : oneMatch.whiteRatingChange}{" "}
               </div>
             </div>
           </span>
@@ -60,9 +50,7 @@ const UserMatchesList = ({ matches, user, users }: any) => {
               <div className="completedMatch__rating">
                 {" "}
                 {oneMatch.blackInitialRating + oneMatch.blackRatingChange}{" "}
-                {oneMatch.blackRatingChange > 0
-                  ? `+${oneMatch.blackRatingChange}`
-                  : oneMatch.blackRatingChange}{" "}
+                {oneMatch.blackRatingChange > 0 ? `+${oneMatch.blackRatingChange}` : oneMatch.blackRatingChange}{" "}
               </div>
             </div>
           </span>

@@ -7,6 +7,7 @@ import TournamentList from "./TournamentList";
 import firebase from "../firebase/FirebaseInit";
 import { TournamentDict, AppState, Tournament } from "../../types";
 import { StyledContainer } from "../styled/StyledContainer";
+import { get, getDatabase, off, ref, set } from "firebase/database";
 
 interface Props {
   loggedin: boolean;
@@ -26,16 +27,13 @@ class TournamentPage extends React.Component<Props, State> {
   tournaments: any;
 
   static tournamentAdded(tournament: NewTournamentData) {
-    firebase
-      .database()
-      .ref(`tournaments/${tournament.id}`)
-      .set(tournament);
+    set(ref(getDatabase(firebase), `tournaments/${tournament.id}`), tournament);
   }
 
   constructor(props: Props) {
     super(props);
     this.state = {
-      tournaments: {}
+      tournaments: {},
     };
   }
 
@@ -44,15 +42,15 @@ class TournamentPage extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    this.tournaments.off();
+    off(this.tournaments);
   }
 
   setupTournamentListener() {
-    this.tournaments = firebase.database().ref("tournaments");
-    this.tournaments.on("value", (snapshot: any) => {
+    this.tournaments = ref(getDatabase(firebase), "tournaments");
+    get(this.tournaments).then((snapshot) => {
       if (snapshot.val()) {
         this.setState({
-          tournaments: snapshot.val()
+          tournaments: snapshot.val(),
         });
       }
     });
@@ -77,11 +75,8 @@ class TournamentPage extends React.Component<Props, State> {
   }
 }
 
-export default connect(
-  (state: AppState) => {
-    return {
-      loggedin: state.loggedin
-    };
-  },
-  null
-)(TournamentPage);
+export default connect((state: AppState) => {
+  return {
+    loggedin: state.loggedin,
+  };
+}, null)(TournamentPage);

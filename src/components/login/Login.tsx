@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import firebase from "../firebase/FirebaseInit";
 import { connect } from "react-redux";
@@ -25,7 +24,7 @@ class LoginComponent extends React.Component<Props, State> {
       user: "",
       password: "",
       feedback: "",
-      loggedin: false
+      loggedin: false,
     };
     this.updateUserState = this.updateUserState.bind(this);
     this.updatePasswordState = this.updatePasswordState.bind(this);
@@ -38,13 +37,13 @@ class LoginComponent extends React.Component<Props, State> {
 
   updateUserState(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      user: e.target.value
+      user: e.target.value,
     });
   }
 
   updatePasswordState(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
 
@@ -52,19 +51,19 @@ class LoginComponent extends React.Component<Props, State> {
     e.preventDefault();
 
     this.setState({
-      feedback: ""
+      feedback: "",
     });
 
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.user, this.state.password)
-      .catch(error => {
+      .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
 
         if (errorCode) {
           this.setState({
-            feedback: "Klarte ikke å logge deg inn, beklager det."
+            feedback: "Klarte ikke å logge deg inn, beklager det.",
           });
         }
       });
@@ -75,7 +74,7 @@ class LoginComponent extends React.Component<Props, State> {
 
     this.setState({
       feedback: "",
-      password: ""
+      password: "",
     });
 
     firebase
@@ -84,22 +83,22 @@ class LoginComponent extends React.Component<Props, State> {
       .then(
         () => {
           this.setState({
-            feedback: "Du er nå logget ut"
+            feedback: "Du er nå logget ut",
           });
         },
-        error => {
+        (error) => {
           this.setState({
-            feedback: "Klarte ikke å logge deg ut, beklager det!"
+            feedback: "Klarte ikke å logge deg ut, beklager det!",
           });
         }
       );
   }
 
   authChangeListener() {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.setState({
-          loggedin: true
+          loggedin: true,
         });
       }
     });
@@ -131,6 +130,6 @@ class LoginComponent extends React.Component<Props, State> {
 export const Login = connect(
   (state: AppState) => ({}),
   (dispatch: any) => ({
-    logMeIn: () => dispatch(logIn())
+    logMeIn: () => dispatch(logIn()),
   })
 )(LoginComponent);

@@ -1,6 +1,8 @@
 import firebase from "../firebase/FirebaseInit";
+import { getDatabase, ref, onValue, set, update } from "firebase/database";
+
 import { User, Match } from "../../types";
-import glicko2 from "glicko2";
+import glicko2, { Player } from "glicko2";
 
 const settings = {
   // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
@@ -12,18 +14,13 @@ const settings = {
   //     small number = good confidence on the rating accuracy
   rd: 200,
   //vol : Default volatility (expected fluctation on the player rating)
-  vol: 0.06
+  vol: 0.06,
 };
 
 const ranking = new glicko2.Glicko2(settings);
 
 class ScoreCalculator {
-  static calculateScore(
-    white: User,
-    black: User,
-    match: Match,
-    winner: string
-  ) {
+  static calculateScore(white: User, black: User, match: Match, winner: string) {
     const updatedObject = Object.assign({}, match);
 
     updatedObject.completed = true;
@@ -31,19 +28,11 @@ class ScoreCalculator {
     updatedObject.whiteInitialRating = white.rating;
     updatedObject.blackInitialRating = black.rating;
 
-    const whitePlayerGlicko = ranking.makePlayer(
-      white.rating,
-      white.matches.length > 10 ? 100 : 300,
-      0.06
-    );
+    const whitePlayerGlicko = ranking.makePlayer(white.rating, white.matches.length > 10 ? 100 : 300, 0.06);
 
-    const blackPlayerGlicko = ranking.makePlayer(
-      black.rating,
-      black.matches.length > 10 ? 100 : 300,
-      0.06
-    );
+    const blackPlayerGlicko = ranking.makePlayer(black.rating, black.matches.length > 10 ? 100 : 300, 0.06);
 
-    const matches = [];
+    const matches: any = [];
 
     if (winner === "white") {
       updatedObject.whiteWon = true;
@@ -64,23 +53,21 @@ class ScoreCalculator {
     updatedObject.blackRatingChange = newRatingBlack - black.rating;
     updatedObject.whiteRatingChange = newRatingWhite - white.rating;
 
-    firebase
-      .database()
-      .ref(`matches/${match.id}`)
-      .set(updatedObject);
-    firebase
-      .database()
-      .ref(`users/${white.id}`)
-      .update({
-        rating: newRatingWhite
-      });
+    const matchesRef = ref(getDatabase(firebase), `matches/${match.id}`);
 
-    firebase
-      .database()
-      .ref(`users/${black.id}`)
-      .update({
-        rating: newRatingBlack
-      });
+    set(matchesRef, updatedObject);
+
+    const usersRef = ref(getDatabase(firebase), `users/${white.id}`);
+
+    update(usersRef, {
+      rating: newRatingWhite,
+    });
+
+    const otherUserRef = ref(getDatabase(firebase), `users/${black.id}`);
+
+    update(otherUserRef, {
+      rating: newRatingBlack,
+    });
   }
 }
 

@@ -1,6 +1,6 @@
-import firebase from "firebase/app";
-require("firebase/auth");
-require("firebase/database");
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 
 const configBeta = {
   apiKey: "AIzaSyBdvsddep5CAnAJVIGSgI3RvZfq5gji9Dw",
@@ -8,7 +8,7 @@ const configBeta = {
   databaseURL: "https://sjakk-beta.firebaseio.com",
   projectId: "sjakk-beta",
   storageBucket: "",
-  messagingSenderId: "26458714233"
+  messagingSenderId: "26458714233",
 };
 
 var configProd = {
@@ -17,7 +17,7 @@ var configProd = {
   databaseURL: "https://sjakk-3bc2d.firebaseio.com",
   projectId: "sjakk-3bc2d",
   storageBucket: "sjakk-3bc2d.appspot.com",
-  messagingSenderId: "84685046486"
+  messagingSenderId: "84685046486",
 };
 
 const app = firebase.initializeApp(configProd);
