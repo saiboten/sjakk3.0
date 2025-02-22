@@ -3,11 +3,10 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 
 import "react-datepicker/dist/react-datepicker.css";
-import firebase from "../firebase/FirebaseInit";
 import { User } from "../../types";
-import { string } from "prop-types";
 import { v4 } from "uuid";
 import { get, getDatabase, off, ref } from "firebase/database";
+import { app } from "../firebase/FirebaseInit";
 
 export interface NewTournamentData {
   date: string;
@@ -56,7 +55,7 @@ class TournamentRegistration extends React.Component<Props, State> {
   }
 
   loadUsers() {
-    this.fireBaseUser = ref(getDatabase(firebase), "users");
+    this.fireBaseUser = ref(getDatabase(app), "users");
     get(this.fireBaseUser).then((snapshot) => {
       if (snapshot.val()) {
         this.setState({

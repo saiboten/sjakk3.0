@@ -1,8 +1,8 @@
-import firebase from "../firebase/FirebaseInit";
-import { getDatabase, ref, onValue, set, update } from "firebase/database";
+import { getDatabase, ref, set, update } from "firebase/database";
 
 import { User, Match } from "../../types";
-import glicko2, { Player } from "glicko2";
+import glicko2 from "glicko2";
+import { app } from "../firebase/FirebaseInit";
 
 const settings = {
   // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
@@ -53,17 +53,17 @@ class ScoreCalculator {
     updatedObject.blackRatingChange = newRatingBlack - black.rating;
     updatedObject.whiteRatingChange = newRatingWhite - white.rating;
 
-    const matchesRef = ref(getDatabase(firebase), `matches/${match.id}`);
+    const matchesRef = ref(getDatabase(app), `matches/${match.id}`);
 
     set(matchesRef, updatedObject);
 
-    const usersRef = ref(getDatabase(firebase), `users/${white.id}`);
+    const usersRef = ref(getDatabase(app), `users/${white.id}`);
 
     update(usersRef, {
       rating: newRatingWhite,
     });
 
-    const otherUserRef = ref(getDatabase(firebase), `users/${black.id}`);
+    const otherUserRef = ref(getDatabase(app), `users/${black.id}`);
 
     update(otherUserRef, {
       rating: newRatingBlack,

@@ -1,7 +1,6 @@
 import React from "react";
 import moment from "moment";
 
-import firebase from "../firebase/FirebaseInit";
 import { User } from "../../types";
 
 interface Callback {
@@ -29,7 +28,7 @@ class MatchRegistration extends React.Component<Props, State> {
       black: props.users[0].id,
       white: props.users[0].id,
       date: moment(),
-      feedback: ""
+      feedback: "",
     };
 
     this.submit = this.submit.bind(this);
@@ -40,14 +39,14 @@ class MatchRegistration extends React.Component<Props, State> {
   whiteChanged(e: React.ChangeEvent<HTMLSelectElement>) {
     this.setState({
       white: e.target.value,
-      feedback: ""
+      feedback: "",
     });
   }
 
   blackChanged(e: React.ChangeEvent<HTMLSelectElement>) {
     this.setState({
       black: e.target.value,
-      feedback: ""
+      feedback: "",
     });
   }
 
@@ -56,19 +55,19 @@ class MatchRegistration extends React.Component<Props, State> {
 
     if (this.state.black === this.state.white) {
       this.setState({
-        feedback: "En spiller kan ikke spille mot seg selv"
+        feedback: "En spiller kan ikke spille mot seg selv",
       });
     } else {
       this.props.callback({
         white: this.state.white,
         black: this.state.black,
-        date: this.state.date.format()
+        date: this.state.date.format(),
       });
     }
   }
 
   render() {
-    const options = this.props.users.map(user => (
+    const options = this.props.users.map((user) => (
       <option key={user.id} value={user.id}>
         {user.name}
       </option>

@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import moment from "moment";
 import { v4 as uuidv4 } from "uuid";
 import MatchList from "./MatchList";
 import MatchRegistration from "./MatchRegistration";
-import firebase from "../firebase/FirebaseInit";
-import { MatchDict, TournamentDict, AppState, UserDict, Tournament as TournamentType, Match } from "../../types";
+import { AppState } from "../../types";
 import { StyledContainer } from "../styled/StyledContainer";
 import { get, getDatabase, ref, set } from "firebase/database";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
+import { app } from "../firebase/FirebaseInit";
 
 require("./tournament.css");
 
@@ -19,21 +18,6 @@ interface Callback {
   date: any;
 }
 
-interface MatchParams {
-  match: {
-    params: {
-      id: string;
-    };
-  };
-}
-
-interface Props extends MatchParams {
-  tournaments: TournamentDict;
-  tournament: TournamentType;
-}
-
-interface State {}
-
 export const Tournament = () => {
   const params = useParams<{ id: string }>();
 
@@ -42,10 +26,6 @@ export const Tournament = () => {
   if (!id) {
     throw new Error("No param for tournament found");
   }
-
-  const [tournamentMatchesIDList, setTournamentMatchesIDList] = useState<string[]>([]);
-  const [allMatches, setAllMatches] = useState<MatchDict>({});
-  const [matches, setMatches] = useState<Match[]>([]);
 
   const {
     users,
@@ -70,34 +50,24 @@ export const Tournament = () => {
   });
 
   function storeMatchInUserList(player: string, matchId: string) {
-    const matchesRef = ref(getDatabase(firebase), `users/${player}/matches`);
+    const matchesRef = ref(getDatabase(app), `users/${player}/matches`);
 
     get(matchesRef).then((snapshot) => {
       if (snapshot.val()) {
         const matches = snapshot.val();
         matches.push(matchId);
-        const userMatchRef = ref(getDatabase(firebase), `users/${player}/matches`);
+        const userMatchRef = ref(getDatabase(app), `users/${player}/matches`);
         set(userMatchRef, matches);
       } else {
         const matches = [];
         matches.push(matchId);
-        set(ref(getDatabase(firebase), `users/${player}/matches`), matches);
+        set(ref(getDatabase(app), `users/${player}/matches`), matches);
       }
     });
   }
 
   function storeNewMatch(newMatch: any) {
-    set(ref(getDatabase(firebase), `matches/${newMatch.id}`), newMatch);
-  }
-
-  function setMatchList() {
-    if (tournamentMatchesIDList && allMatches) {
-      const matchList = tournamentMatchesIDList.map((matchId: string) => allMatches[matchId]).filter((match) => match);
-
-      setMatches(matchList);
-    } else {
-      setMatches([]);
-    }
+    set(ref(getDatabase(app), `matches/${newMatch.id}`), newMatch);
   }
 
   function addMatch(matchData: Callback) {
@@ -115,18 +85,18 @@ export const Tournament = () => {
     storeMatchInUserList(matchData.black, newMatch.id);
     storeNewMatch(newMatch);
 
-    const tournamentMatchesRef = ref(getDatabase(firebase), `tournaments/${id}/matches`);
+    const tournamentMatchesRef = ref(getDatabase(app), `tournaments/${id}/matches`);
 
     get(tournamentMatchesRef).then((snapshot) => {
       if (snapshot.val()) {
         const matchIdList = snapshot.val();
         matchIdList.push(newMatch.id);
 
-        set(ref(getDatabase(firebase), `tournaments/${id}/matches`), matchIdList);
+        set(ref(getDatabase(app), `tournaments/${id}/matches`), matchIdList);
       } else {
         const matchIdList = [];
         matchIdList.push(newMatch.id);
-        set(ref(getDatabase(firebase), `tournaments/${id}/matches`), matchIdList);
+        set(ref(getDatabase(app), `tournaments/${id}/matches`), matchIdList);
       }
     });
   }

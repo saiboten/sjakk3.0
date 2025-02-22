@@ -1,6 +1,6 @@
 import React from "react";
 
-import firebase from "../firebase/FirebaseInit";
+import firebase from "firebase/compat/app";
 
 interface Props {}
 
@@ -19,20 +19,17 @@ class AddUserForm extends React.Component<Props, State> {
     const user = {
       name: data.name,
       id: data.email.replace(/\./, "-dot-"),
-      rating: 1200
+      rating: 1200,
     };
 
-    firebase
-      .database()
-      .ref(`users/${user.id}`)
-      .set(user);
+    firebase.database().ref(`users/${user.id}`).set(user);
   }
 
   constructor(props: Props) {
     super(props);
     this.state = {
       name: "",
-      email: ""
+      email: "",
     };
 
     this.nameChange = this.nameChange.bind(this);
@@ -44,23 +41,23 @@ class AddUserForm extends React.Component<Props, State> {
     e.preventDefault();
     AddUserForm.nameAdded({
       name: this.state.name,
-      email: this.state.email
+      email: this.state.email,
     });
     this.setState({
       name: "",
-      email: ""
+      email: "",
     });
   }
 
   nameChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      name: e.target.value
+      name: e.target.value,
     });
   }
 
   emailChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({
-      email: e.target.value
+      email: e.target.value,
     });
   }
 
@@ -72,11 +69,7 @@ class AddUserForm extends React.Component<Props, State> {
           <label htmlFor="name">Navn</label>
           <input onChange={this.nameChange} id="name" value={this.state.name} />
           <label htmlFor="email">Email</label>
-          <input
-            onChange={this.emailChange}
-            id="email"
-            value={this.state.email}
-          />
+          <input onChange={this.emailChange} id="email" value={this.state.email} />
         </div>
         <input className="button" type="submit" value="Legg til bruker" />
       </form>

@@ -13,10 +13,6 @@ const StyledWrapper = styled.div`
   }
 `;
 
-const StyledLink = styled(NavLink)`
-  padding: 5px;
-`;
-
 const StyledHeader = styled.h1`
   flex: 1;
 `;

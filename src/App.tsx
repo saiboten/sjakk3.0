@@ -6,7 +6,7 @@ import { getDatabase, onValue, ref } from "firebase/database";
 
 import { Provider } from "react-redux";
 
-import firebase from "./components/firebase/FirebaseInit";
+import firebase from "firebase/compat/app";
 
 import { setUsers } from "./state/actions/user";
 import { setTournaments } from "./state/actions/tournaments";
@@ -14,6 +14,7 @@ import { setMatches } from "./state/actions/matches";
 import { tournaments, matches, users, loggedin } from "./state/reducers";
 import { LoadedWrapper } from "./LoadedWrapper";
 import { logIn } from "./state/actions/loggedin";
+import { app } from "./components/firebase/FirebaseInit";
 
 /* eslint-disable no-underscore-dangle */
 let store = createStore(
@@ -35,7 +36,7 @@ require("./global.css");
 
 moment.locale("nb_NO");
 
-const database = getDatabase(firebase);
+const database = getDatabase(app);
 
 const userRef = ref(database, "users");
 

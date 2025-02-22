@@ -4,10 +4,9 @@ import moment from "moment";
 import { connect } from "react-redux";
 import TournamentRegistration, { NewTournamentData } from "./TournamentRegistration";
 import TournamentList from "./TournamentList";
-import firebase from "../firebase/FirebaseInit";
 import { TournamentDict, AppState, Tournament } from "../../types";
-import { StyledContainer } from "../styled/StyledContainer";
 import { get, getDatabase, off, ref, set } from "firebase/database";
+import { app } from "../firebase/FirebaseInit";
 
 interface Props {
   loggedin: boolean;
@@ -27,7 +26,7 @@ class TournamentPage extends React.Component<Props, State> {
   tournaments: any;
 
   static tournamentAdded(tournament: NewTournamentData) {
-    set(ref(getDatabase(firebase), `tournaments/${tournament.id}`), tournament);
+    set(ref(getDatabase(app), `tournaments/${tournament.id}`), tournament);
   }
 
   constructor(props: Props) {
@@ -46,7 +45,7 @@ class TournamentPage extends React.Component<Props, State> {
   }
 
   setupTournamentListener() {
-    this.tournaments = ref(getDatabase(firebase), "tournaments");
+    this.tournaments = ref(getDatabase(app), "tournaments");
     get(this.tournaments).then((snapshot) => {
       if (snapshot.val()) {
         this.setState({

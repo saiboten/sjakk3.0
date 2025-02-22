@@ -1,11 +1,12 @@
 import React from "react";
 
-import firebase from "../firebase/FirebaseInit";
+import firebase from "firebase/compat/app";
 import ScoreCalculator from "./ScoreCalculator";
 import MatchHelper from "./MatchHelper";
 import { Match, User, AppState } from "../../types";
 import { connect } from "react-redux";
 import { getDatabase, ref, remove } from "firebase/database";
+import { app } from "../firebase/FirebaseInit";
 
 require("./upcomingmatch.css");
 
@@ -116,7 +117,7 @@ class UpcomingMatch extends React.Component<Props, State> {
         MatchHelper.deleteListElementFromList(`tournaments/${this.props.tournament}/matches`, this.props.match.id);
         MatchHelper.deleteListElementFromList(`users/${this.props.match.white}/matches`, this.props.match.id);
         MatchHelper.deleteListElementFromList(`users/${this.props.match.black}/matches`, this.props.match.id);
-        const matchRef = ref(getDatabase(firebase), `matches/${this.props.match.id}`);
+        const matchRef = ref(getDatabase(app), `matches/${this.props.match.id}`);
         remove(matchRef);
       });
   }

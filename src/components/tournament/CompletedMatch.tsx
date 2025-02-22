@@ -1,6 +1,6 @@
 import React from "react";
 
-import firebase from "../firebase/FirebaseInit";
+import firebase from "firebase/compat/app";
 import MatchHelper from "./MatchHelper";
 import { Match, User, AppState } from "../../types";
 import { connect } from "react-redux";
@@ -28,7 +28,7 @@ class CompletedMatch extends React.Component<Props, State> {
     this.restoreUserRatings = this.restoreUserRatings.bind(this);
 
     this.state = {
-      confirmedDelete: false
+      confirmedDelete: false,
     };
   }
 
@@ -38,13 +38,13 @@ class CompletedMatch extends React.Component<Props, State> {
     }
 
     this.setState({
-      confirmedDelete: true
+      confirmedDelete: true,
     });
   }
 
   cancelConfirmDelete() {
     this.setState({
-      confirmedDelete: false
+      confirmedDelete: false,
     });
   }
 
@@ -52,26 +52,20 @@ class CompletedMatch extends React.Component<Props, State> {
     firebase
       .database()
       .ref(`users/${this.props.match.white}`)
-      .once("value", snapshotUser => {
+      .once("value", (snapshotUser) => {
         const theUser = snapshotUser.val();
         theUser.rating -= this.props.match.whiteRatingChange;
-        firebase
-          .database()
-          .ref(`users/${this.props.match.white}`)
-          .set(theUser);
+        firebase.database().ref(`users/${this.props.match.white}`).set(theUser);
       });
 
     firebase
       .database()
       .ref(`users/${this.props.match.black}`)
-      .once("value", snapshotUser => {
+      .once("value", (snapshotUser) => {
         const theUser = snapshotUser.val();
         theUser.rating -= this.props.match.blackRatingChange;
 
-        firebase
-          .database()
-          .ref(`users/${this.props.match.black}`)
-          .set(theUser);
+        firebase.database().ref(`users/${this.props.match.black}`).set(theUser);
       });
   }
 
@@ -79,14 +73,11 @@ class CompletedMatch extends React.Component<Props, State> {
     firebase
       .database()
       .ref(`matches/${this.props.match.id}`)
-      .once("value", snapshot => {
+      .once("value", (snapshot) => {
         MatchHelper.deleteListElementFromList(`tournaments/${this.props.tournament}/matches`, this.props.match.id);
         MatchHelper.deleteListElementFromList(`users/${this.props.match.white}/matches`, this.props.match.id);
         MatchHelper.deleteListElementFromList(`users/${this.props.match.black}/matches`, this.props.match.id);
-        firebase
-          .database()
-          .ref(`matches/${this.props.match.id}`)
-          .remove();
+        firebase.database().ref(`matches/${this.props.match.id}`).remove();
 
         if (this.props.match.completed) {
           this.restoreUserRatings();
@@ -113,7 +104,7 @@ class CompletedMatch extends React.Component<Props, State> {
     const { loggedin } = this.props;
 
     const displayNone = {
-      display: "none"
+      display: "none",
     };
 
     let confirmDeleteMatchButton = <span style={displayNone} />;
@@ -163,7 +154,7 @@ class CompletedMatch extends React.Component<Props, State> {
 
 export default connect(
   (state: AppState) => ({
-    loggedin: state.loggedin
+    loggedin: state.loggedin,
   }),
   null
 )(CompletedMatch);
